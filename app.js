@@ -17,15 +17,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 
 app.use(express.static(__dirname + '/public'));
 
-// app.use(session({
-//
-//   secret: "Our little secret.",
-//   resave: false,
-//   saveUninitialized: false
-// }));
-//
-// app.use(passport.initialize());
-// app.use(passport.session());
+
 
 app.use(session({
   secret: process.env.SECRET,
