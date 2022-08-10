@@ -1,0 +1,47 @@
+<%- include("header"); -%>
+<br><br>
+<h2 style="text-align:center">List of existing users:</h2>
+<br><br>
+<table class="userTable">
+
+
+    <ul>
+      <% newList.forEach(function(user){ %>
+        <tr >
+
+            <td> <b> <li class="username"><%=user.username%></li> </b> </td>
+
+
+<td>
+  <a href="chat/<%= user.username %>"> <button type="button" class="btn btn-outline-success" name="button">Message</button> </a>
+</td>
+
+
+
+
+
+            <td><button type="submit" class="username btn btn-warning" name="button">Add to favourites</button></td>
+        </tr>
+
+      <% }); %>
+
+    </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</table>
+
+
+<%- include("footer"); -%>
