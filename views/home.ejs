@@ -13,11 +13,11 @@
     <div class="container" id="container">
 
 
-
-
-
-
   	<div class="form-container sign-up-container">
+
+
+    <%#   ********************SignUp form posting to "/" route****************** %>
+
   		<form action="/" method="post">
   			<h1>Create Account</h1>
   			<div class="social-container">
@@ -26,24 +26,18 @@
   				<a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
   			</div>
   			<span><br> OR USE CUSTOM REGISTRATION</span>
-
   			<input type="text" name="username" placeholder="Username" />
   			<input type="email" name="email" placeholder="Email" />
   			<input type="password" name="password" placeholder="Password" />
-
         <br><br>
         <span> <%= signUpMessage%> </span>
-
   			<button type="submit" class="btn btn-outline-dark">Sign Up</button>
   		</form>
   	</div>
 
 
 
-
-
-
-
+    <%#   ********************SignIn form posting to "/login" route****************** %>
   	<div class="form-container sign-in-container">
   		<form action="/login" method="post">
   			<h1>Sign in</h1>
@@ -53,45 +47,38 @@
   				<a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
   			</div>
   			<span> <br>OR USE YOUR ACCOUNT</span>
-
   			<input type="text" name="username" placeholder="Username" />
   			<input type="password" name="password" placeholder="Password" />
-
   			<a href="#">Forgot your password?</a>
         <br>
         <span> <h5><%= signInMessage%></h5>  </span>
         <br>
-
   			<button class="btn btn-outline-dark" >Sign In</button>
   		</form>
   	</div>
 
 
 
-  	<div class="overlay-container">
 
 
-  		<div class="overlay">
-  			<div class="overlay-panel overlay-left">
-  				<h1><b>Welcome Back!</b></h1>
-  				<p>To keep connected with us please login with your personal info</p>
-  				<button  class="btn btn-light" id="signIn">Sign In</button>
-  			</div>
+    	<div class="overlay-container">
+    		<div class="overlay">
+    			<div class="overlay-panel overlay-left">
+    				<h1><b>Welcome Back!</b></h1>
+    				<p>To keep connected with us please login with your personal info</p>
+    				<button  class="btn btn-light" id="signIn">Sign In</button>
+    			</div>
+    			<div class="overlay-panel overlay-right">
+            <h1><b>Let us Connect!</b></h1>
+            <h1>F.R.I.E.N.D.S</h1>
+    				<button  class="btn btn-light" id="signUp">Sign Up</button>
+    			</div>
+    		</div>
+    	</div>
+    </div>
 
 
+    <script src="javascript/styles.js" charset="utf-8"></script>
 
-  			<div class="overlay-panel overlay-right">
-          <h1><b>Let us Connect!</b></h1>
-          <h1>F.R.I.E.N.D.S</h1>
-
-  				<button  class="btn btn-light" id="signUp">Sign Up</button>
-  			</div>
-  		</div>
-  	</div>
-
-
-</div>
-
-<script src="javascript/styles.js" charset="utf-8"></script>
   </body>
 </html>

@@ -1,5 +1,39 @@
 <%- include("header"); -%>
-<h1>All your messages here!!</h1>
+
+
+<div  style="margin-left:40%">
+<br>
+
+<h1> <%= message %> </h1>
+
+
+<br><br> <br>
+
+<table>
+<ul>
+  <% newChatElements.forEach(function(item){ %>
+    <tr >
+
+        <td> <b> <li class="username"><%=item.person%></li> </b> </td>
+
+
+<td>
+<a href="/chat/<%= item.person %>"> <button type="button" class="btn btn-outline-warning" name="button">Open chat</button> </a>
+
+</td>
+
+
+    </tr>
+
+  <% }); %>
+
+</ul>
+
+</table>
+
+
+
+</div>
 
 
 <%- include("footer"); -%>
