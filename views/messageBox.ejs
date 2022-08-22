@@ -1,46 +1,106 @@
 <%- include("header"); -%>
 
-<br>
 
 
-  <div class="card" style="width: 30rem; margin:auto" >
-    <div class="">
-      <img style="height: 450px" src="https://media.istockphoto.com/vectors/user-avatar-profile-icon-black-vector-illustration-vector-id1209654046?k=20&m=1209654046&s=612x612&w=0&h=Atw7VdjWG8KgyST8AXXJdmBkzn0lvgqyWod9vTb2XoE=" class="card-img-top" alt="...">
+
+<section style="background-color: warning;">
+  <div class="container py-5">
+
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-8 col-lg-6 col-xl-4"  >
+
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center p-3"
+            style="border-top: 4px solid #ffc107;">
+            <h5 class="mb-0">Chat messages</h5>
+
+
+
+            <% /*
+            Number of chat messages
+            <div class="d-flex flex-row align-items-center">
+              <span class="badge bg-warning me-3">20</span>
+              <i class="fas fa-minus me-3 text-muted fa-xs"></i>
+              <i class="fas fa-comments me-3 text-muted fa-xs"></i>
+              <i class="fas fa-times text-muted fa-xs"></i>
+            </div>
+            */ %>
+
+          </div>
+
+
+
+          <%/*Message List div */%>
+          <div class="card-body" data-mdb-perfect-scrollbar="true" style="position: relative; height: 700px">
+
+            <div class="card-body" style="margin:auto; height: 500px; overflow-y: scroll; height: 600px">
+
+
+
+              <% chatList.forEach(function(item){ %>
+
+                <div class="d-flex justify-content-between">
+                  <p class="small mb-1"><b><%=item.sender%></b> </p>
+                  <p class="small mb-1 text-muted"><%=item.datetime%></p>
+                </div>
+
+
+                <div class="d-flex justify-content-between">
+                  <p class="small p-2 mb-3 rounded-3 next" style="background-color: #f5f6f7;">
+                    <%=item.text%></p>
+                  <div>
+
+                  </div>
+                </div>
+                <br>
+              <% }); %>
+
+
+
+              <% /*One chat text representation */ %>
+
+
+
+
+
+              <% /*One chat text representation over */ %>
+
+
+
+
+            </div>
+
+
+
+            <% /*TEXT BOX FOR MESSAGING AND SEND BUTTON*/ %>
+
+
+        <form action="/messege/<%= reciever %>" method="post" style="margin:auto">
+          <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
+            <div class="input-group mb-0">
+              <input type="text" class="form-control" name="message" id="message" placeholder="Type message"
+                aria-label="Recipient's username" aria-describedby="button-addon2" />
+              <button class="btn btn-warning" type="submit" id="button-addon2" style="padding-top: .55rem;">
+                Send
+              </button>
+            </div>
+          </div>
+        </form>
+
+        </div>
+
+
+        </div>
+      </div>
     </div>
-
-
-  <div class="card-body" style="margin:auto; height: 250px; overflow-y: scroll;">
-
-    <ul>
-
-    <% chatList.forEach(function(item){ %>
-
-      <li>
-        <%=item.sender%>
-         :
-        <%=item.text%>
-      </li>
-
-    <% }); %>
-
-
-    </ul>
   </div>
-  <br>
+</section>
 
-  <div class="form-group" style="margin:auto">
 
-    <form action="/messege/<%= reciever %>" method="post" style="margin:auto">
-    <input type="text" class="form-control" name="message" id="message" name="message" placeholder="Write your message here!">
-    <br>
-    <button type="submit" name="button" class="btn btn-success" style="margin:auto">Send</button>
 
-    </form>
 
-  </div>
 
-  <br>
-</div>
+
 
 
 

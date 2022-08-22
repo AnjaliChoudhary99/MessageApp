@@ -1,0 +1,36 @@
+<%- include("header"); -%>
+
+
+
+<br><br>
+<h2 style="text-align:center">My favourite Users:</h2>
+<br><br>
+
+<table class="userTable">
+
+
+<ul>
+  <% favouriteArray.forEach(function(person){ %>
+
+    <tr>
+
+        <td><b> <li class="username"><%=person%></li> </b></td>
+
+        <td>
+          <a href="/chat/<%= person %>"> <button type="button" class="btn btn-outline-warning">Chat</button></a>
+        </td>
+
+        <td>
+          <a href="/remove/<%=person%>"><button type="submit" class="username btn btn-warning" name="button">Remove</button></a>
+        </td>
+
+    </tr>
+
+  <% }); %>
+
+</ul>
+
+
+</table>
+
+<%- include("footer"); -%>

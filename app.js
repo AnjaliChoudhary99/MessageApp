@@ -42,10 +42,12 @@ const messageAppSchema = new mongoose.Schema({
     person:String,
     New:Boolean,
     messages:[{
+      datetime:String,
       sender:String,
       text:String
     }]
-  }]
+  }],
+  favouriteArray:[String]
 });
 
 
@@ -60,7 +62,7 @@ passport.deserializeUser(MessageAppModel.deserializeUser());
 
 
 var currentUser="";
-
+var passedFavouriteArray=[];
 
 
 app.get("/", function(req, res){
@@ -115,18 +117,18 @@ app.get("/messages", function(req, res){
           }
         });
 
-
+        var message="";
 
         console.log("type of newChatElements is: ", typeof(newChatElements));
         if(newChatElements.length == 0){
           console.log("no such chats");
-          var message = "No new messages!"
+          message = "No new messages!"
         }else{
           console.log("array of elements with boolean field = true are: ");
           newChatElements.forEach(function(item){
           console.log(item.person);
+          message = "New messages from:"
 
-          message = "";
           });
         }
         res.render("messages", {newChatElements:newChatElements, message:message});
@@ -138,7 +140,23 @@ app.get("/messages", function(req, res){
 });
 
 
+app.get("/favourites", function(req, res){
+  if(req.isAuthenticated()){
 
+    MessageAppModel.findOne({username:currentUser}, function(err, found){
+      if(err){
+        console.log("error in finding the user for its favourite array :" ,err)
+      }else{
+        var favouriteArray = found.favouriteArray;
+        console.log(favouriteArray);
+        res.render("favourites", {currentUser:currentUser, favouriteArray:favouriteArray});
+      }
+    })
+
+  }else{
+    res.redirect("/");
+  }
+});
 
 
         // });
@@ -157,7 +175,19 @@ app.get("/messages", function(req, res){
 
 app.get("/dashboard", function(req, res){
   if(req.isAuthenticated()){
-    res.render("dashboard", {currentUser:currentUser});
+
+
+    var currentdate = new Date();
+    var datetime = "Last Sync: " + currentdate.getDate() + "/"
+                + (currentdate.getMonth()+1)  + "/"
+                + currentdate.getFullYear() + " @ "
+                + currentdate.getHours() + ":"
+                + currentdate.getMinutes() + ":"
+                + currentdate.getSeconds();
+
+    console.log("date time is : ", datetime);
+
+    res.render("dashboard", {currentUser:currentUser, datetime:datetime});
   }
   else{
     res.redirect("/");
@@ -187,13 +217,26 @@ app.post("/messege/:reciever", function(req, res){
   console.log("chat object from ", currentUser, " to ", reciever ," is : ", req.body);
   const sendedText = req.body.message;
   console.log("sended text is : ", req.body.message);
+// Last Sync: 22/8/2022 @ 9:59:49
+  var currentdate = new Date();
+
+  var datetime = currentdate.getDate() + " "
+              + new Date().toLocaleString('default', { month: 'short' })+ " "
+              + new Date().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+              // + currentdate.getHours() + ":"
+              // + currentdate.getMinutes()
+  // + currentdate.getFullYear() +"  "
+              //month    const month = date.toLocaleString('default', { month: 'long' });
+
+  console.log("date time is : ", datetime);
 
   const newMessage = {
+    datetime:datetime,
     sender: currentUser,
     text:sendedText
   }
-
   console.log("newMwssage object made is : ", newMessage);
+
 
 
 
@@ -221,6 +264,7 @@ app.post("/messege/:reciever", function(req, res){
         person:reciever,
         New:false,
         messages:[{
+          datetime:datetime,
           sender:currentUser,
           text:sendedText}]
       }
@@ -237,6 +281,7 @@ app.post("/messege/:reciever", function(req, res){
     console.log("successfully saved to sender's dB");
   }
 });
+
 
 
 
@@ -262,6 +307,7 @@ app.post("/messege/:reciever", function(req, res){
         person:currentUser,
         New:true,
         messages:[{
+          datetime:datetime,
           sender:currentUser,
           text:sendedText}]
       }
@@ -319,7 +365,7 @@ app.get("/chat/:person", function(req, res){
             element.New = false;
 
             found.save();
-            
+
             console.log("element after found.save", element);
             console.log("boolean for the opened chat successfully set to false");
 
@@ -348,6 +394,7 @@ app.get("/chat/:person", function(req, res){
            res.render("messageBox", {reciever: reciever, chatList:[]})
            }
            else{
+
              res.render("messageBox", {reciever: reciever, chatList: element.messages});
            }
          }
@@ -357,6 +404,83 @@ app.get("/chat/:person", function(req, res){
     res.redirect("/");
   }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//adding to favouriteArray
+
+app.get("/favourite/:favouritePerson", function(req, res){
+  var favouritePerson = req.params.favouritePerson;
+
+  MessageAppModel.findOne({username:currentUser}, function(err, found){
+    if(err){
+      console.log("Error in route /favourites/person: ", err);
+    }else{
+      var existing = found.favouriteArray.find(function(person){
+        return person == favouritePerson;
+      });
+      console.log(existing);
+      if(existing === undefined){
+        found.favouriteArray.push(favouritePerson);
+        passedFavouriteArray.push(favouritePerson);
+        found.save();
+      }else{
+        console.log("Already in favouriteArray");
+      }
+    }
+  });
+    res.redirect("/users");
+  });
+
+
+
+
+  app.get("/remove/:person", function(req, res){
+    var removePerson = req.params.person;
+
+    MessageAppModel.findOne({username:currentUser}, function(err, found){
+      if(err){
+        console.log("Error in route /remove/person : ", err);
+      }else{
+        console.log("found.favouriteArray is : ", found.favouriteArray)
+        found.favouriteArray.remove(removePerson);
+        found.save();
+        console.log("new array is : ", found.favouriteArray);
+
+        res.redirect("/favourites");
+      }
+    })
+
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
