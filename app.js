@@ -1,13 +1,15 @@
 require("dotenv").config();
 const express= require("express");
 const app= express();
-const port = 3000;
+const port = 3001;
 
 
 const session = require("express-session");
 const passport = require("passport");
 const passportLocalMongoose= require("passport-local-mongoose");
 
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 
 const ejs = require("ejs");
 app.set("view engine", "ejs");
@@ -19,6 +21,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.static(__dirname + '/public'));
 
 
+
 app.use(session({
   secret: process.env.SECRET,
   resave: false,
@@ -28,8 +31,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
+
 const mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost:27017/MessageAppDB");
+mongoose.connect(`mongodb+srv://f20201987:${process.env.PASSWORD}@cluster0.vod5m2n.mongodb.net/?retryWrites=true&w=majority`);
 
 
 
@@ -223,10 +227,6 @@ app.post("/messege/:reciever", function(req, res){
   var datetime = currentdate.getDate() + " "
               + new Date().toLocaleString('default', { month: 'short' })+ " "
               + new Date().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
-              // + currentdate.getHours() + ":"
-              // + currentdate.getMinutes()
-  // + currentdate.getFullYear() +"  "
-              //month    const month = date.toLocaleString('default', { month: 'long' });
 
   console.log("date time is : ", datetime);
 
@@ -585,9 +585,15 @@ app.post("/login", function(req, res){
 });
 
 
+io.on('connection', function (socket) {
+  socket.emit('news', { hello: 'world' });
+  socket.on('my other event', function (data) {
+    console.log(data);
+  });
+});
 
 
 
-app.listen(port, function(){
+server.listen(port, function(){
   console.log("Server listening on port ", port);
 });
